@@ -1,10 +1,8 @@
-library(tidyverse) # cool shit
-library(dplyr) # transformation packages
-library(doBy) 
+library(tidyverse) # cool shit (dplyr)
+library(doBy) # lowkey forget what this one does
 library(moments) # skewdness and kurtosis
-library(GGally)
-library(openxlsx) # specific to xlsx files
 library(readxl) # reads excel files
+library(nortest) # Lilliefors KS test
 
 flounder_raw = read_excel('/Users/suzanneguy/R_Projects/Jay Stats/STATS 2025/Homework Assignments/Homework 1/Flounder_Data.xls')
 head(flounder_raw)
@@ -67,8 +65,14 @@ hist(flounder$LN_length)
 hist(flounder$SL_ratio)
 hist(flounder$asinsqrt_SL_ratio)
 
+ks.test(flounder_raw$Length, "pnorm", mean=mean(flounder_raw$Length), sd=sd(flounder_raw$Length))
+ggplot(flounder) +
+  stat_qq(aes(sample=Length))
+shapiro.test(flounder_raw$Length)
+lillie.test(flounder_raw$Length)
 ### Question 4
 
 (sqrt(2.312)/23.213)*100 # CV
 (1.96)*(sqrt(2.312)/sqrt(137)) # 95% CI
 (2.57)*(sqrt(2.312)/sqrt(137)) # 99% CI
+
