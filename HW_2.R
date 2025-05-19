@@ -35,6 +35,7 @@ summary(coral)
 lillie.test(coral$C_Diet) # normal
 lillie.test(coral$M_Diet) # normal
 
+<<<<<<< HEAD
 # changing data frame to t.test friendly format
 long_coral = coral %>%
   pivot_longer(cols = c("C_Diet", "M_Diet"), names_to = "Food", values_to = "Diameter")
@@ -55,4 +56,9 @@ wilcox.test(Diameter ~ FOOD_numeric, coral_manwhit) # also finds difference
 # p-value larger than parametric alternative (p = 0.02292)
 
 # good for now
+=======
+
+
+
+>>>>>>> ece835b35d98621d3f9665c8e20e262c707df63b
 
