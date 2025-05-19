@@ -54,5 +54,5 @@ coral_manwhit <- long_coral %>% mutate(
 wilcox.test(Diameter ~ FOOD_numeric, coral_manwhit) # also finds difference
 # p-value larger than parametric alternative (p = 0.02292)
 
-
+# good for now
 
