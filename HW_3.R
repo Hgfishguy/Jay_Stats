@@ -62,3 +62,27 @@ summary(bahamas_aov)
 # Both lagoon and season had a significant affect on Salinity, though no harmonic interaction was detected
 
 plot(bahamas_aov)
+
+### Question 3
+
+salinity_data = data.frame(Tide = c("Spring","Spring","Spring","Spring","Spring","Spring","Spring","Spring","Spring","Spring","Spring","Spring","Neap","Neap","Neap","Neap","Neap","Neap","Neap","Neap","Neap","Neap","Neap","Neap"),
+                           Site = c(1,1,1,1,2,2,2,2,3,3,3,3,1,1,1,1,2,2,2,2,3,3,3,3),
+                           Salinity = c(21.5,19.6,20.9,22.8,14.5,17.4,15.0,17.8,16.0,20.3,18.5,19.3,14.8,15.6,13.5,16.4,12.1,11.4,12.7,14.5,14.4,14.7,13.8,12.0))
+# normal?
+salinity_data %>%
+  group_by(Tide) %>%
+  group_modify(~tidy(lillie.test(.x$Salinity)))
+# yes
+salinity_data %>%
+  group_by(Site) %>%
+  group_modify(~tidy(lillie.test(.x$Salinity)))
+# also yes
+
+salinity_data$Site = factor(salinity_data$Site)
+# need variable as factor to do levene's test!
+salinity_data %>%
+  levene_test(Salinity ~ Tide*Site, center = "mean")
+# homogenous data!
+
+salinity_aov = aov(Salinity ~ Tide*Site, data = salinity_data)
+summary(salinity_aov)
