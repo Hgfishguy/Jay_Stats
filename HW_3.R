@@ -41,5 +41,24 @@ summary(shrimp_aov)
 
 plot(shrimp_aov) # residuals!
 
+### Question 2
 
+bahamas_data = data.frame(Lagoon = c("Salt Pond","Salt Pond","Salt Pond","Salt Pond","Salt Pond","Salt Pond","Salt Pond","Salt Pond","Salt Pond","Salt Pond", "Flat Lake","Flat Lake","Flat Lake","Flat Lake","Flat Lake","Flat Lake","Flat Lake","Flat Lake","Flat Lake","Flat Lake"),
+                          Season = c("Summer", "Summer","Summer","Summer","Summer", "Winter", "Winter","Winter","Winter","Winter","Summer", "Summer","Summer","Summer","Summer", "Winter", "Winter","Winter","Winter","Winter"),
+                          Salinity = c(70.9, 67.9,69.9,68.1,70,59.2,53.8, 47.6,48.3,51.7,65.7,59.4,67.7,63.2,61.8,50.8,50.5,53.9,52.1,51.7))
+# normality?
+bahamas_data %>%
+  group_by(Season) %>%
+  group_modify(~tidy(lillie.test(.x$Salinity)))
+# normal!
 
+bahamas_data %>%
+  group_by(Lagoon) %>%
+  group_modify(~tidy(lillie.test(.x$Salinity)))
+# Salt Pond abnormal! 
+
+bahamas_aov = aov(Salinity ~ Lagoon*Season, data = bahamas_data)
+summary(bahamas_aov)
+# Both lagoon and season had a significant affect on Salinity, though no harmonic interaction was detected
+
+plot(bahamas_aov)
