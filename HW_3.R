@@ -82,7 +82,13 @@ salinity_data$Site = factor(salinity_data$Site)
 # need variable as factor to do levene's test!
 salinity_data %>%
   levene_test(Salinity ~ Tide*Site, center = "mean")
-# homogenous data!
+# homogeneous data!
 
 salinity_aov = aov(Salinity ~ Tide*Site, data = salinity_data)
 summary(salinity_aov)
+
+salinity_data %>%
+  group_by(Tide, Site) %>%
+  get_summary_stats(Salinity, type = "mean_sd")
+
+
