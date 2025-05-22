@@ -47,5 +47,8 @@ salinity_data %>%
   get_summary_stats(Salinity, type = "mean_sd")
 
 emmeans(salinity_aov, pairwise ~ Tide)
+emmeans(salinity_aov, pairwise ~ Site)
 
 pairwise.t.test(salinity_data$Salinity, salinity_data$Site,p.adjust.method ="bonferroni")
+# no sites significantly similar! 
+
