@@ -76,3 +76,36 @@ repeat_aov <- aov(Chl.a ~ (MIX*SED*NUT*factor(Time)) + Error(TANK/Time), data = 
 summary(repeat_aov)
 # nut and sed seem to have significant affect on Chl.a
 
+### Question 4 
+
+repeat2_data = mesocosm_data %>%
+  pivot_longer(cols = c("FUCO0", "FUCO1", "FUCO2"), names_to = "Time", values_to = "Fuco") %>%
+  convert_as_factor(TANK, Time) 
+
+repeat2_data %>% group_by(MIX, SED, NUT, Time) %>%
+  get_summary_stats(Fuco, type = "mean_sd")
+
+repeat2_data %>%
+  group_by(Time) %>%
+  group_modify(~ tidy(lillie.test(.x$Fuco)))
+# not very normal (other than day 1 ;-; )
+
+repeat2_data %>%
+  group_by(Time) %>%
+  shapiro_test(Fuco)
+# still abnormal!
+
+repeat2_data$MIX = as.factor(repeat2_data$MIX)
+repeat2_data$NUT = as.factor(repeat2_data$NUT)
+repeat2_data$SED = as.factor(repeat2_data$SED)
+# need qualitative explanatory variables for levene test!
+
+repeat2_data %>%
+  group_by(Time) %>%
+  levene_test(Fuco ~ MIX*SED*NUT, center = "mean")
+# levene test shows heteroskedascticity
+
+repeat2_aov <- aov(Fuco ~ (MIX*SED*NUT*factor(Time)) + Error(TANK/Time), data = repeat2_data)
+summary(repeat2_aov)
+# just nutrient significant!
+
