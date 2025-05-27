@@ -126,6 +126,58 @@ friedman_Nitrate
 
 ### Question 2
 
+fishfood_data = data.frame(Site = c(1,2,3,4,5,6),
+                           FishMeal = c(58,324,206,94,39,418),
+                           Control = c(47,331,163,75,30,397))
+fishfood_long = fishfood_data %>%
+  pivot_longer(cols = c(FishMeal, Control), names_to = "Feed", values_to = "Worms")
+head(fishfood_long)
 
+fishfood_long$Site = as.factor(fishfood_long$Site) # DONT FORGET THIS STEP
+fishfood_aov = aov(Worms ~ Site + Feed, data = fishfood_long)
+summary(fishfood_aov)
+# feed highly significant!!!!
 
+t.test(fishfood_data$FishMeal, fishfood_data$Control, paired = TRUE, alternative = "two.sided")
+# found significance, higher error rate?
+
+### Question 3
+
+nematodes_data = data.frame( Muddy = c(2201, 2186, 2296, 2288, 2220, 2241, 2265),
+                             Sandy = c(2234, 2215, 2302, 2243, 2238, 2308, NA))
+nematodes_long = nematodes_data %>%
+  pivot_longer(cols = c( Muddy , Sandy), names_to = "Sediment", values_to = "Count")
+
+nematodes_long %>%
+  group_by(Sediment) %>%
+  group_modify(~ tidy(lillie.test(.x$Count)))
+# normal ish
+
+nematodes_aov = aov(Count ~ Sediment, data = nematodes_long)
+summary(nematodes_aov)
+# no significance
+
+### Question 4 
+
+nematodes_long %>% kruskal_test(Count ~ Sediment)
+# also no sig
+
+### Question 5 
+
+fertilizer_data = data.frame(Plot = c(1,2,3,4,5,6,7,8,9,10), Nutrient = c(142,140,144,144,142,146,149,150,142,148), 
+                             Control = c(138,136,147,139,143,141,143,145,136,146))
+fertilizer_long = fertilizer_data %>% pivot_longer(cols = c(Nutrient, Control),
+                                                   names_to = "Treatment", values_to = "Biomass")
+fertilizer_long$Plot = as.factor(fertilizer_long$Plot)
+fertilizer_aov = aov(Biomass ~ Treatment + Plot, data = fertilizer_long)
+summary(fertilizer_aov)
+# treatment significant (slightly)
+
+### Question 6
+
+wilcox = fertilizer_long %>% wilcox_test(Biomass ~ Treatment, p.adjust.method = "bonferroni")
+wilcox
+# not very significant
+
+### Question 7 
 
