@@ -8,7 +8,7 @@ library(DescTools) # non-parametric paired t-tests
 
 ### Question 1
 
-hydro = read_excel('/Users/suzanneguy/R_Projects/Jay Stats/STATS 2025/Homework Assignments/Homework 2/Hydro_Data.xlsx')
+hydro = read_excel('/Users/suzanneguy/R_Projects/Jay_Stats/STATS 2025/Homework Assignments/Homework 2/Hydro_Data.xlsx')
 
 lillie.test(hydro$B_Temp) # normal
 lillie.test(hydro$S_Temp) # normal
